@@ -13,14 +13,16 @@ rep = requests.get('http://abdoutlem1997.pythonanywhere.com/bookings/')
 jsonResp = rep.text
 df = pd.read_json(jsonResp)
 df.drop('id',inplace=True,axis=1)
-
+df.drop('etage',inplace=True,axis=1)
 
 cm = 1/2.54
 
 data = df.groupby('roomid').value_counts()
 
+st.dataframe(data)
 
 st.bar_chart(data)
+
 
 
 
