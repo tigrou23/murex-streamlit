@@ -7,7 +7,6 @@ import plotly.express as px
 import arrow
 
 def reservations():
-
     try :
         rep = requests.get('https://hpereira.pythonanywhere.com/bookings/')
         rep.raise_for_status()
@@ -42,7 +41,7 @@ def reservations():
         st.bar_chart(df_filtered2['heures'].value_counts())
 
         st.write('### Données supplémentaires :')
-        moyenne_jours = float(df_filtered1.groupby('jours').size().mean())
+        moyenne_jours = int(df_filtered1.groupby('jours').size().mean())
         moyenne_heures = int(df_filtered2['heures'].mode())
         col4, col5 = st.columns(2)
         col6, col7 = st.columns(2)
@@ -53,8 +52,7 @@ def reservations():
         col7.metric("Horaire pendant lequel l'utilisation est la plus élevée", str(moyenne_heures) + " Heures")
 
 page_names_to_funcs = {
-    "Réservations": reservations,
-
+    "Réservations": reservations
 }
 
 demo_name = st.sidebar.selectbox("Choix de la thématique :", page_names_to_funcs.keys())
