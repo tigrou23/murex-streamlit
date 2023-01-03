@@ -6,6 +6,11 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import arrow
 import json
+from datetime import datetime
+
+def monthToNum(shortMonth):
+    months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
+    return months[int(shortMonth) - 1]
 
 def reservations():
     try :
@@ -15,7 +20,7 @@ def reservations():
         st.header("⚠️ Impossible de se connecter à l'API. ⚠️")
         st.write("Vérifiez votre connexion ou contactez le support.")
     else :     
-        st.title('Réservations :')        
+        st.title('Réservations :')     
         data = json.loads(rep.text)
         df = pd.DataFrame(data)
         df.drop('id',inplace=True,axis=1)
@@ -79,10 +84,18 @@ def utilisation():
         indexNames = df[df['etage_kdmap'] == -50].index
         df.drop(indexNames , inplace=True)
 
-        df_filtered2 = df.copy()
+        df_filtered3 = df.copy()
+        df_filtered3 = df_filtered3["date"].astype(str).str.split("-",expand = True)   
+        df_filtered3.columns = ["jours", "mois", "reste"]
+        date = datetime.now()
+        mois_courant = str(date).split('-')[1]
+        df_filtered3 = df_filtered3[df_filtered3['mois'] == mois_courant]
+        st.markdown("### Nombre d'utilisation sur le mois de " + monthToNum(mois_courant) + " :")
+        st.markdown("##### " + str(len(df_filtered3)) + " utilisations")
 
         st.write('### Utilisation globale des KD MAPS :')
-        
+        df_filtered2 = df.copy()
+
         # options = st.multiselect(
         #     'Choix des mois à afficher',
         #     ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
