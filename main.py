@@ -8,8 +8,8 @@ import arrow
 import json
 from datetime import datetime
 
-def monthToNum(shortMonth):
-    months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
+def NumToMonths(shortMonth):
+    months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
     return months[int(shortMonth) - 1]
 
 def reservations():
@@ -90,26 +90,27 @@ def utilisation():
         date = datetime.now()
         mois_courant = str(date).split('-')[1]
         df_filtered3 = df_filtered3[df_filtered3['mois'] == mois_courant]
-        st.markdown("### Nombre d'utilisation sur le mois de " + monthToNum(mois_courant) + " :")
+        st.markdown("### Nombre d'utilisation sur le mois de " + NumToMonths(mois_courant) + " :")
         st.markdown("##### " + str(len(df_filtered3)) + " utilisations")
 
         st.write('### Utilisation globale des KD MAPS :')
+        start_color, end_color = st.select_slider(
+            'Sélectionnnez le plage temporelle :',
+            options=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+            value=('Janvier', 'Décembre')
+        )
+        mois=['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+        index_debut =mois.index(start_color) + 1
+        index_fin = mois.index(end_color) + 1
+        annee = st.radio(
+            "Sélectionnez l'année :",
+            ('2023', '2022'),
+        )
         df_filtered2 = df.copy()
-
-        # options = st.multiselect(
-        #     'Choix des mois à afficher',
-        #     ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-        #     ['01']
-        # )
-        
-        # df_filtered2 = df_filtered2["date"].astype(str).str.split("-", n = 4,expand = True)   
-        # st.write(df_filtered2)
-        # df_filtered3.columns = ["jours", "mois", "reste"]
-        # options = [int(i) for i in options]
-        # df_filtered3 = df_filtered3[df_filtered3['mois'] == '01']
-
+        df_filtered2[["jours", "mois", "reste"]] = df_filtered2["date"].apply(lambda x: pd.Series(str(x).split("-")))
+        df_filtered2[["annee", "reste"]] = df_filtered2["reste"].apply(lambda x: pd.Series(str(x).split("|")))
+        df_filtered2 = df_filtered2[(df_filtered2['mois'].astype(int) >= index_debut) & (df_filtered2['mois'].astype(int) <= index_fin) & (df_filtered2['annee'] == annee)]
         if(len(df_filtered2.index) != 0):
-            df_filtered2.drop('date', inplace=True,axis=1)
             st.bar_chart(df_filtered2['etage_kdmap'].value_counts())
             st.markdown('- axe x : Étage de la KD MAP')
             st.markdown("- axe y : Nombre d'utilisation")
