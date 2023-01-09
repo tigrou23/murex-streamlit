@@ -117,7 +117,7 @@ with tabs[0]:
         df_filtered2 = df_filtered2[(df_filtered2['mois'].astype(int) >= index_debut) & (df_filtered2['mois'].astype(int) <= index_fin) & (df_filtered2['annee'] == annee)]
         if(len(df_filtered2.index) != 0):
             st.markdown('- axe x : Étage de la KD MAP')
-            st.markdown("- axe y : Nombre d'utilisation")
+            st.markdown("- axe y : Nombre d'utilisations")
             st.bar_chart(df_filtered2['etage_kdmap'].value_counts())
         else:
             st.warning("Absence de données pour former l'histogramme.")
@@ -133,7 +133,7 @@ with tabs[0]:
             df_filtered = df_filtered[1].astype(str).str.split(":", n = 1, expand = True)
             df_filtered.columns = ['heures', 'minutes et secondes']
             st.markdown('- axe x : Heure')
-            st.markdown("- axe y : Nombre d'utilisation")
+            st.markdown("- axe y : Nombre d'utilisations")
             st.bar_chart(df_filtered['heures'].value_counts())
         else:
             st.warning("Absence de données pour former l'histogramme.")
