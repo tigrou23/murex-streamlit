@@ -80,6 +80,7 @@ def utilisation():
         df = pd.DataFrame(data)
         indexNames = df[df['etage_kdmap'] == -50].index
         df.drop(indexNames , inplace=True)
+        st.markdown("*Une utilisation est comptée comme un retour à la page d'accueil. Cela s'effectue toutes les 45 secondes si la KDMAP a été touchée.*")
 
         df_filtered3 = df.copy()
         df_filtered3 = df_filtered3["date"].astype(str).str.split("-",expand = True)   
