@@ -5,18 +5,11 @@ import arrow
 import json
 from datetime import datetime
 
-tab_titles = [
-    "Utilisation",
-    "Réservations"
-]
-
-tabs = st.tabs(tab_titles)
-
 def NumToMonths(shortMonth):
     months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
     return months[int(shortMonth) - 1]
 
-with tabs[1]:
+def reservations():
     try :
         rep = requests.get('https://hpereira.pythonanywhere.com/bookings/')
         rep.raise_for_status()
@@ -74,7 +67,7 @@ with tabs[1]:
         col6.metric("Nombre moyen de réservations par jour", moyenne_jours)
         col7.metric("Horaire pendant lequel il y a eu le plus de réservations", str(moyenne_heures) + " Heures")
 
-with tabs[0]:
+def utilisation():
     try :
         rep = requests.get('https://hpereira.pythonanywhere.com/inactivity/')
         rep.raise_for_status()
@@ -146,3 +139,11 @@ with tabs[0]:
         moyenne_nbutilisation = int(df_filtered2.groupby('jours').size().mean())
         col4.metric("KD MAP la plus utilisée", "Étage : " + str(moyenne_utilisation))
         col5.metric("Utilisation journalière moyenne des KD MAPS", moyenne_nbutilisation)
+
+page_names_to_funcs = {
+    "Utilisation": utilisation,
+    "Réservations": reservations
+}
+
+demo_name = st.sidebar.selectbox("Choix de la thématique :", page_names_to_funcs.keys())
+page_names_to_funcs[demo_name]()
