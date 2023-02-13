@@ -69,7 +69,7 @@ def reservations():
 
 def utilisation():
     try :
-        rep = requests.get('https://hpereira.pythonanywhere.com/inactivity/')
+        rep = requests.get('https://hpereira.pythonanywhere.com/test/')
         rep.raise_for_status()
     except requests.exceptions.HTTPError:
         st.header("⚠️ Impossible de se connecter à l'API. ⚠️")
