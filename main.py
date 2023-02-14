@@ -33,7 +33,7 @@ def NumToMonths(shortMonth):
 #         st.write('### Nombre de réservations par salle :')
 #         etage = st.selectbox("Sélectionnez l'étage de la salle : ",(1,2,3,4,5,6,7,8,9,'All'))
 #         if(etage!='All'):
-#             df_filtered = df[df['etage'] == etage]
+#             df_filtered = df[df['etage'] == str(etage)]
 #         else: 
 #             df_filtered = df
 #         if(len(df_filtered.index) != 0):
