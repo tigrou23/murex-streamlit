@@ -126,7 +126,7 @@ with tabs[0]:
         st.write('### Utilisation détaillée des KD MAPS :')
         etage = st.selectbox("Sélectionnez l'étage de la KD MAP : ", ('All',1,2,3,4,5,6,7,8,9))
         if(etage!='All'):
-            df_filtered = df[df['etage_kdmap'] == etage]
+            df_filtered = df[df['etage_kdmap'] == str(etage)]
         else: 
             df_filtered = df
         if(len(df_filtered.index) != 0):
