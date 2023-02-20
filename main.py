@@ -126,9 +126,9 @@ with tabs[0]:
         st.write('### Utilisation détaillée des KD MAPS :')
         etage = st.selectbox("Sélectionnez l'étage de la KD MAP : ", ('All',1,2,3,4,5,6,7,8,9))
         if(etage!='All'):
-            df_filtered = df[df['etage_kdmap'] == str(etage)]
+            df_filtered = df_filtered2[df_filtered2['etage_kdmap'] == str(etage)]
         else: 
-            df_filtered = df
+            df_filtered = df_filtered2
         if(len(df_filtered.index) != 0):
             df_filtered = df_filtered["date"].astype(str).str.split("|", n = 1, expand = True)
             df_filtered = df_filtered[1].astype(str).str.split(":", n = 1, expand = True)
@@ -141,9 +141,12 @@ with tabs[0]:
 
         st.write('### Données supplémentaires :')
         col4, col5 = st.columns(2)
-        df_filtered2 = df["date"].astype(str).str.split("|", n = 1, expand = True)
-        df_filtered2.columns = ["jours", "heures"]
-        moyenne_utilisation = int(df['etage_kdmap'].mode()[0])
-        moyenne_nbutilisation = int(df_filtered2.groupby('jours').size().mean())
-        col4.metric("KD MAP la plus utilisée", "Étage : " + str(moyenne_utilisation))
-        col5.metric("Utilisation journalière moyenne des KD MAPS", moyenne_nbutilisation)
+        if(len(df_filtered2.index) != 0):
+            df_filtered2 = df_filtered2["date"].astype(str).str.split("|", n = 1, expand = True)
+            df_filtered2.columns = ["jours", "heures"]
+            moyenne_utilisation = int(df['etage_kdmap'].mode()[0])
+            moyenne_nbutilisation = int(df_filtered2.groupby('jours').size().mean())
+            col4.metric("KD MAP la plus utilisée", "Étage : " + str(moyenne_utilisation))
+            col5.metric("Utilisation journalière moyenne des KD MAPS", moyenne_nbutilisation)
+        else:
+            st.warning("Absence de données pour former les statistiques.")
